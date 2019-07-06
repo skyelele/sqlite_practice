@@ -18,8 +18,30 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-    
-        
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        SQLiteDatabase sqLiteDatabase = getBaseContext().openOrCreateDatabase("sqlite-test-1.db", MODE_PRIVATE, null);
+        String sql = "CREATE TABLE contacts(name TEXT, phone INTEGER, email TEXT);";
+        Log.d(TAG, "onCreate: sql is " + sql);
+        sqLiteDatabase.execSQL(sql);
+        sql = "INSERT INTO contacts VALUES('tim', 834848, 'tim@gmail.com');";
+        sqLiteDatabase.execSQL(sql);
+        sql = "INSERT INTO contacts VALUES('Fred', 292929, 'fred@nurk.com');";
+        sqLiteDatabase.execSQL(sql);
+
+        Cursor query = sqLiteDatabase.rawQuery("SELECT * FROM contacts;", null);
+        if(query.moveToFirst()) {
+          String name = query.getString(0);
+          int phone = query.getInt(1);
+          String email = query.getString(2);
+          Toast.makeText(this, "Name = " + name + " phone = " + phone + " email = " = email, Toast.LENGHT_LONG).show();
+        }
+        query.close();
+        sqLiteDatabase.close();
+
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
