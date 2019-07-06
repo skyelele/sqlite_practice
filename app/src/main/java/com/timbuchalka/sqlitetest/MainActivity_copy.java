@@ -24,24 +24,24 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         SQLiteDatabase sqLiteDatabase = getBaseContext().openOrCreateDatabase("sqlite-test-1.db", MODE_PRIVATE, null);
-        String sql = "CREATE TABLE contacts(name TEXT, phone INTEGER, email TEXT);";
-        Log.d(TAG, "onCreate: sql is " + sql);
+        String sql = "DROP TABLE IF EXISTS contacts;";
         sqLiteDatabase.execSQL(sql);
-        sql = "INSERT INTO contacts VALUES('tim', 834848, 'tim@gmail.com');";
+        sql = "CREATE TABLE IF NOT EXISTS contacts(name TEXT, phone INTEGER, email TEXT);";
         sqLiteDatabase.execSQL(sql);
-        sql = "INSERT INTO contacts VALUES('Fred', 292929, 'fred@nurk.com');";
+        sql = "INSERT INTO contacts VALUES('Skye', 393939, 'skye@skye.com');"
         sqLiteDatabase.execSQL(sql);
 
         Cursor query = sqLiteDatabase.rawQuery("SELECT * FROM contacts;", null);
         if(query.moveToFirst()) {
-          String name = query.getString(0);
-          int phone = query.getInt(1);
-          String email = query.getString(2);
-          Toast.makeText(this, "Name = " + name + " phone = " + phone + " email = " = email, Toast.LENGHT_LONG).show();
+          do {
+            String name = query.getString(0);
+            int phone = query.getINt(1);
+            String email = query.getString(2);
+            Toast.makeText(this, "Name = " + name + " phone = " + phone + " email = " + email, Toast.LENGTH_LONG).show();
+          } while (query.moveToNext());
         }
         query.close();
         sqLiteDatabase.close();
-
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
